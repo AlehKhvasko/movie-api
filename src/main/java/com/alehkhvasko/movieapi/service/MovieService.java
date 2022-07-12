@@ -1,6 +1,7 @@
 package com.alehkhvasko.movieapi.service;
 
 import com.alehkhvasko.movieapi.models.Movie;
+import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 import java.util.EmptyStackException;
@@ -10,12 +11,12 @@ import java.util.Optional;
 @Service
 public class MovieService {
 
-    private  List<Movie> movies = List.of(new Movie(
-            1L,
-            "The Hurt Locker",
-            "Kathryn Bigelow’s career hit a second stride with the release of her gripping Iraq War drama," +
-                    " “The Hurt Locker.” The film follows a bomb disposal team from one job to the next. Instead of traditional character development," +
-                    " the story coasts by on a wave of sustained and almost unbearable tension. "),
+    private final List<Movie> movies = List.of(new Movie(
+                    1L,
+                    "The Hurt Locker",
+                    "Kathryn Bigelow’s career hit a second stride with the release of her gripping Iraq War drama," +
+                            " “The Hurt Locker.” The film follows a bomb disposal team from one job to the next. Instead of traditional character development," +
+                            " the story coasts by on a wave of sustained and almost unbearable tension. "),
             new Movie(
                     2L,
                     "Mad Max: Fury Road",
@@ -32,9 +33,29 @@ public class MovieService {
     }
 
     public Movie getMovie(Long id) {
-        Movie movie = movies.stream().filter(m->m.getId().equals(id)).findFirst().get();
+        Movie movie = movies.stream().filter(m -> m.getId().equals(id)).findFirst().get();
         return Optional.of(movie).orElseThrow(EmptyStackException::new);
     }
 
 
+    public void addMovie(Movie movie) {
+        movies.add(movie);
+    }
+
+
+    public void updateMovie(Movie movie, Long id) {
+        for (int i = 0; i < movies.size(); i++) {
+            //TODO Refactor casting
+            Movie foundMovie = movies.get(Math.toIntExact(id));
+            if (foundMovie.getId().equals(id)) {
+                foundMovie.setName(movie.getName());
+                foundMovie.setDescription(movie.getDescription());
+                return;
+            }
+        }
+    }
+
+    public void deletMovie(Long id) {
+        movies.remove(id);
+    }
 }

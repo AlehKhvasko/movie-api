@@ -3,9 +3,7 @@ package com.alehkhvasko.movieapi.controllers;
 import com.alehkhvasko.movieapi.models.Movie;
 import com.alehkhvasko.movieapi.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,4 +27,16 @@ public class MovieController {
     public Movie getMovie(@PathVariable Long id){
         return movieService.getMovie(id);
     }
+
+    @RequestMapping(method = RequestMethod.POST, name = "/movies")
+    public void addMovie(@RequestBody Movie movie){
+        movieService.addMovie(movie);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, name = "/movies/{id}")
+    public void updateMovie(@RequestBody Movie movie, @PathVariable Long id){
+        movieService.updateMovie(movie, id);
+    }
+
+
 }
