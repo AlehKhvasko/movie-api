@@ -1,17 +1,15 @@
 package com.alehkhvasko.movieapi.service;
 
-import com.alehkhvasko.movieapi.models.Movie;
-import lombok.Builder;
+import com.alehkhvasko.movieapi.models.dto.movie.Movie;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 @Service
 public class MovieService {
 
     public List<Movie> movies = new ArrayList<>(List.of(
-            new Movie(1, "The Hurt Locker","It won six Academy Awards, making Bigelow the first woman in history to win for Best Director" ),
+            new Movie(1, "The Hurt Locker","It won six Academy Awards"),
             new Movie(2, "Mad Max: Fury Road","The film took home six of the 10 Academy Awards for which it was nominated." ),
             new Movie(3, "The Truman Show","The film received three Oscar nominations, including for Best Screenplay – Written Directly for the Screen." )
     ));
@@ -29,6 +27,7 @@ public class MovieService {
 
     public void addMovie(Movie movie) {
         movies.add(movie);
+        //TODO is it correct to inject mapper to service add
     }
 
 
