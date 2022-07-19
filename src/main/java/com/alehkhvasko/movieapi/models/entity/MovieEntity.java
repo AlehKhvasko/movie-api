@@ -14,12 +14,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "list_of_movies")
-public class ListOfMoviesEntity {
+@Table(name = "movie")
+public class MovieEntity {
     @Id
     private Integer id ;
-    public String name;
-    public String description;
+    private String name;
+    private String description;
 
     @OneToMany(
             cascade = CascadeType.ALL,

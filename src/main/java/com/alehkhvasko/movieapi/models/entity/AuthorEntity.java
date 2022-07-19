@@ -11,12 +11,11 @@ public class AuthorEntity {
     @Column(length = 150)
     private String name;
     @Column(length = 50)
-    private String DOB;
-
+    private String dateOfBirth;
     @ManyToOne
     @JoinColumn(
             name = "list_of_movies",
             foreignKey = @ForeignKey(name = "fk_author")
     )
-    private ListOfMoviesEntity listOfMoviesEntity;
+    private MovieEntity movie;
 }

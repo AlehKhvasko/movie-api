@@ -1,36 +1,35 @@
 package com.alehkhvasko.movieapi.models.dto.movie;
 
 import com.alehkhvasko.movieapi.models.dto.author.Author;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.constraints.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Data
 public class Movie {
-    @Positive
-    private Integer id ;
-    @NotBlank
+    private Integer id;
+    @NotBlank(message = "Name shouldn't be empty")
     public String name;
-    @NotBlank
+    @NotBlank(message = "Description shouldn't be empty")
     public String description;
-    @NonNull
     private List<Author> authors = new ArrayList<>();
 
-    public Movie(Integer id, String name, String description) {
-        this.id = id;
+    public Movie(){
+        this.id = new Random().nextInt();
+    }
+
+    public Movie(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
-    public Movie(String name, String description) {
-        this.id = new Random().nextInt();
-        this.name = name;
-        this.description = description;
+    public void addAuthor(Author author){
+        authors.add(author);
     }
 
     @Override

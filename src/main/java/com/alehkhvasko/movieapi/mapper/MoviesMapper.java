@@ -1,14 +1,13 @@
 package com.alehkhvasko.movieapi.mapper;
 
-import com.alehkhvasko.movieapi.models.dto.author.Author;
 import com.alehkhvasko.movieapi.models.dto.movie.Movie;
-import com.alehkhvasko.movieapi.models.entity.ListOfMoviesEntity;
-
-import java.util.List;
+import com.alehkhvasko.movieapi.models.entity.MovieEntity;
 
 public class MoviesMapper {
-/*        public ListOfMoviesEntity toMovieEntity(Movie movies){
-           List<Author> listOfMovies = movies.getAuthors().stream()
-                   .map()
-        }*/
+    public MovieEntity movieEntity(Movie movie){
+        return MovieEntity.builder()
+                .name(movie.name)
+                .description(movie.description)
+                .build();
+    }
 }
