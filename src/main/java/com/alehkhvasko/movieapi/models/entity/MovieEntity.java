@@ -1,28 +1,18 @@
 package com.alehkhvasko.movieapi.models.entity;
 
-import com.alehkhvasko.movieapi.models.dto.author.Author;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-@Entity
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "movie")
 public class MovieEntity {
-    @Id
-    private Integer id ;
+    private final Long id= new Random().nextLong();
     private String name;
     private String description;
-
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            mappedBy = "author")
-    private List<AuthorEntity> authors = new ArrayList<>();
+    //private List<AuthorEntity> authors = new ArrayList<>();
 }

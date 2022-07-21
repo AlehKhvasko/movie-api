@@ -1,50 +1,58 @@
 package com.alehkhvasko.movieapi.service;
 
-import com.alehkhvasko.movieapi.models.dto.author.Author;
-import com.alehkhvasko.movieapi.models.dto.movie.Movie;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.alehkhvasko.movieapi.mapper.MoviesMapper;
+import com.alehkhvasko.movieapi.models.dto.author.AuthorDto;
+import com.alehkhvasko.movieapi.models.dto.movie.MovieDto;
+import com.alehkhvasko.movieapi.models.entity.MovieEntity;
+import com.alehkhvasko.movieapi.repository.MovieRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public class MovieService {
+    private final MovieRepository movieRepository;
+    private final MoviesMapper moviesMapper;
 
-    public List<Movie> movies = new ArrayList<Movie>();
-
-    public List<Movie> getAllMovies() {
-        return movies;
+    public MovieService(MovieRepository movieRepository, MoviesMapper moviesMapper){
+        this.movieRepository= movieRepository;
+        this.moviesMapper = moviesMapper;
     }
 
-    public Movie getMovie(Integer id) {
-        return movies.stream().filter(m -> m.getId().equals(id)).findFirst().get();
+    public MovieEntity getMovie(Long id) {
+        return movieRepository.get(id)
+                .orElseThrow(IllegalArgumentException::new);
     }
 
-    public void addMovie(Movie movie) {
-        movies.add(movie);
+    public List<MovieEntity> getAllMovies() {
+        return movieRepository.getAllMovies();
     }
 
-    public void updateMovie(Movie movie, Integer id) {
-        for (int i = 0; i < movies.size(); i++) {
-            Movie foundMovie = movies.get(i);
-            if (foundMovie.getId().equals(id)) {
-                foundMovie.setName(movie.getName());
-                foundMovie.setDescription(movie.getDescription());
+    public void addMovie(MovieDto movieDto) {
+        MovieEntity movieEntity = moviesMapper.toMovieEntity(movieDto);
+        movieRepository.add(movieEntity);
+    }
+
+/*    public void updateMovie(MovieDto movieDto, Integer id) {
+        for (int i = 0; i < movieDtos.size(); i++) {
+            MovieDto foundMovieDto = movieDtos.get(i);
+            if (foundMovieDto.getId().equals(id)) {
+                foundMovieDto.setName(movieDto.getName());
+                foundMovieDto.setDescription(movieDto.getDescription());
                 return;
             }
         }
-    }
+    }*/
 
-    public void deleteMovie(Integer id) {
-        movies.removeIf(t->t.getId().equals(id));
-    }
+/*    public void deleteMovie(Integer id) {
+        movieDtos.removeIf(t->t.getId().equals(id));
+    }*/
 
-    public void addAuthor(Author author, Integer id) {
-        Movie movieById = getMovie(id);
-/*        if (Optional.of(movieById).isEmpty()){
-             new ResponseEntity<Author>(HttpStatus.BAD_REQUEST);
+    public void addAuthor(AuthorDto authorDto, Integer id) {
+        //MovieDto movieDtoById = getMovie(id);
+/*        if (Optional.of(movieDtoById).isEmpty()){
+             new ResponseEntity<AuthorDto>(HttpStatus.BAD_REQUEST);
         }*/
-        movieById.addAuthor(author);
+       // movieDtoById.addAuthor(authorDto);
     }
 }

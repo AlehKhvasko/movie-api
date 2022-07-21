@@ -1,9 +1,8 @@
 package com.alehkhvasko.movieapi.controllers;
 
-import com.alehkhvasko.movieapi.models.dto.author.Author;
-import com.alehkhvasko.movieapi.models.dto.movie.Movie;
+import com.alehkhvasko.movieapi.models.dto.author.AuthorDto;
+import com.alehkhvasko.movieapi.models.entity.AuthorEntity;
 import com.alehkhvasko.movieapi.service.AuthorService;
-import com.alehkhvasko.movieapi.service.MovieService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,22 +18,22 @@ public class AuthorController {
     }
 
     @GetMapping
-    public List<Author> getAllMovies() {
+    public List<AuthorEntity> getAllAuthors() {
         return authorService.getAllAuthors();
     }
 
-    @GetMapping("/{id}")
-    public Author getMovie(@PathVariable Long id) {
+/*    @GetMapping("/{id}")
+    public AuthorDto getMovie(@PathVariable Long id) {
         return authorService.getAuthor(id);
-    }
+    }*/
 
     @PostMapping
-    public void addMovie(@RequestBody Author author) {
-        authorService.addAuthor(author);
+    public AuthorEntity addAuthor(@RequestBody AuthorDto authorDto) {
+        return authorService.addAuthor(authorDto);
     }
 /*
     @PutMapping("/{id}")
-    public void updateMovie(@RequestBody Movie movie, @PathVariable Integer id) {
+    public void updateMovie(@RequestBody MovieDto movie, @PathVariable Integer id) {
         movieService.updateMovie(movie, id);
     }
 

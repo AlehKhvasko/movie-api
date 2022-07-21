@@ -1,31 +1,36 @@
 package com.alehkhvasko.movieapi.service;
 
-import com.alehkhvasko.movieapi.models.dto.author.Author;
-import com.alehkhvasko.movieapi.models.dto.movie.Movie;
+import com.alehkhvasko.movieapi.mapper.AuthorMapper;
+import com.alehkhvasko.movieapi.models.dto.author.AuthorDto;
+import com.alehkhvasko.movieapi.models.entity.AuthorEntity;
+import com.alehkhvasko.movieapi.repository.AuthorRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthorService {
 
-    public List<Author> authors = new ArrayList<>();
+    private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
 
-    public List<Author> getAllAuthors() {
-        return authors;
+    public AuthorService(AuthorRepository authorRepository, AuthorMapper authorMapper){
+        this.authorRepository = authorRepository;
+        this.authorMapper = authorMapper;
     }
 
-    public Author getAuthor(Long id) {
-        return authors.stream()
+    public List<AuthorEntity> getAllAuthors() {
+        return authorRepository.getAllAuthors();
+    }
+
+/*    public AuthorDto getAuthor(Long id) {
+        return authorDtos.stream()
                 .filter(m -> m.getId().equals(id))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
-    }
+    }*/
 
-    public void addAuthor(Author author) {
-        authors.add(author);
+    public AuthorEntity addAuthor(AuthorDto authorDto) {
+        return authorRepository.add(authorMapper.toAuthorEntity(authorDto));
     }
 }
