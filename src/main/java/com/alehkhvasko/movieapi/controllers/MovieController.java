@@ -11,7 +11,7 @@ import javax.validation.Valid;
 
 
 @Controller
-@RequestMapping("/movies")
+@RequestMapping
 public class MovieController {
 
     private final MovieService movieService;
@@ -20,18 +20,24 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping
+    @GetMapping("/movies")
     public String getAllMovies(Model model) {
         model.addAttribute("movies", movieService.getAllMovies());
         return "movie.html";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/movies/{id}")
     public MovieEntity getMovie(@PathVariable Long id) {
         return movieService.getMovie(id);
     }
 
-    @PostMapping
+    @GetMapping("/")
+    public String getForm(Model model) {
+       model.addAttribute("grade", new MovieDto());
+       return "form";
+    }
+
+    @PostMapping("/movies")
     public void addMovie(@RequestBody @Valid MovieDto movieDto) {
         movieService.addMovie(movieDto);
     }
