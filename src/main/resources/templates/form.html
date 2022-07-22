@@ -15,7 +15,7 @@
         <h2> Movie Portal </h2>
         <form action="post" th:object="${movie}" th:action="@{/handleSubmit}">
             <input type="text" class="name" placeholder="Name" th:field="*{name}">
-            <input type="text" class="discription" placeholder="Discription" th:field="*{description}">
+            <input type="text" class="discription" placeholder="Description" th:field="*{description}">
             <br><br>
             <input type="submit" value="Submit">
         </form>
