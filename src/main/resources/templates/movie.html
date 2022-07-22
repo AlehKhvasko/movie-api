@@ -27,7 +27,7 @@
                 <td th:text="${movie.name}"></td>
                 <td th:text="${movie.description}"></td>
                 <td><a role="button" class="update" th:href="@{/(count = ${movie.count})}">Update</a></td>
-                <td><a role="button" class="update" th:href="@{/delete/{count}(count=${movie.count})}">Delete</a></td>
+                <td style="color: red"><a role="button" id="delete" class="update"  th:href="@{/delete/{count}(count=${movie.count})}">Delete</a></td>
             </tr>
         </table>
     </div>
