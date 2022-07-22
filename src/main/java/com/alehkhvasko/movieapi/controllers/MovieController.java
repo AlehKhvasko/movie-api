@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 
 @Controller
 @RequestMapping
@@ -32,20 +30,33 @@ public class MovieController {
     }
 
     @GetMapping("/")
-    public String getForm(Model model) {
-       model.addAttribute("grade", new MovieDto());
-       return "form";
+    public String getForm(Model model, @RequestParam(required = false) Integer count) {
+
+        MovieEntity movieEntity;
+        if (movieService.getMovieByCount(count).isEmpty()) {
+            System.out.println(count);
+            movieEntity = new MovieEntity();
+        }
+
+        else {
+            movieEntity = movieService.getByCountMovie(count);
+        }
+        model.addAttribute("movie", movieEntity);
+        return "form";
     }
 
-    @PostMapping("/movies")
-    public void addMovie(@RequestBody @Valid MovieDto movieDto) {
-        movieService.addMovie(movieDto);
+    @GetMapping  (value = "/delete/{count}")
+    public String handleDeleteUser(@PathVariable Integer count) {
+        movieService.deleteMovie(movieService.getByCountMovie(count));
+        return "redirect:/movies";
     }
 
-/*    @PutMapping("/{id}")
-    public void updateMovie(@RequestBody @Valid MovieDto movieDto, @PathVariable Integer id) {
-        movieService.updateMovie(movieDto, id);
-    }*/
+    @GetMapping("/handleSubmit")
+    public String addMovie(MovieDto movieDto) {
+        movieService.addOrUpdateMovie(movieDto, movieDto.count);
+        return "redirect:/movies";
+    }
+
 
 /*    @DeleteMapping("/{id}")
     public void deleteMovie(@PathVariable Integer id) {

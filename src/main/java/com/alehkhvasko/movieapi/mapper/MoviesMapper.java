@@ -6,8 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MoviesMapper {
-    public MovieEntity toMovieEntity(MovieDto movieDto){
+    public static MovieEntity toMovieEntity(MovieDto movieDto){
         return MovieEntity.builder()
+                .count(movieDto.count)
                 .name(movieDto.name)
                 .description(movieDto.description)
                 .build();
