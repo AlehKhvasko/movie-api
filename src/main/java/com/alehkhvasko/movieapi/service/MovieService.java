@@ -1,7 +1,6 @@
 package com.alehkhvasko.movieapi.service;
 
 import com.alehkhvasko.movieapi.mapper.MoviesMapper;
-import com.alehkhvasko.movieapi.models.dto.author.AuthorDto;
 import com.alehkhvasko.movieapi.models.dto.movie.MovieDto;
 import com.alehkhvasko.movieapi.models.entity.MovieEntity;
 import com.alehkhvasko.movieapi.repository.MovieRepository;
@@ -37,7 +36,7 @@ public class MovieService {
         movieRepository.add(movieEntity);
     }
 
-    public Optional<MovieEntity> getMovieByCount(Integer count) {
+    public Optional<MovieEntity> findMovieByCountNumber(Integer count) {
         for (int i = 0; i < getAllMovies().size(); i++) {
             if (getAllMovies().get(i).getCount().equals(count)) {
                 return Optional.of(getAllMovies().get(i));
@@ -48,9 +47,8 @@ public class MovieService {
 
     public void addOrUpdateMovie(MovieDto movieDto, Integer count) {
         List<MovieEntity> movieEntities = getAllMovies();
-        if (getMovieByCount(count).isEmpty()) {
-            ++count;
-            movieRepository.add(MoviesMapper.toMovieEntity(movieDto));
+        if (findMovieByCountNumber(count).isEmpty()) {
+            addMovie(movieDto);
         } else {
             for (MovieEntity foundMovieDto : movieEntities) {
                 if (foundMovieDto.getCount().equals(count)) {

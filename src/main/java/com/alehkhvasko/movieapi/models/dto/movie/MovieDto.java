@@ -10,10 +10,10 @@ import java.util.*;
 
 @Data
 public class MovieDto {
-    public Integer count = 1;
-    @NotBlank(message = "Name shouldn't be empty")
+    public Integer count = 0;
+    @Size(min = 3, message = "Should be at least 3 symbols")
     public String name;
-    @NotBlank(message = "Description shouldn't be empty")
+    @Size(min = 3, message = "Should be at least 3 symbols")
     public String description;
     private List<AuthorDto> authorDtos = new ArrayList<>();
 

@@ -13,9 +13,12 @@
     </div>
     <div class="container">
         <h2> Movie Portal </h2>
-        <form action="post" th:object="${movie}" th:action="@{/handleSubmit}">
+        <form action="post" th:object="${movies}" th:action="@{/handleSubmit}">
+            <p style="color: red" th:errors="*{name}"></p>
             <input type="text" class="name" placeholder="Name" th:field="*{name}">
+            <p style="color: red" th:errors="*{description}"></p>
             <input type="text" class="discription" placeholder="Description" th:field="*{description}">
+            <input type="hidden"  th:field="*{count}">
             <br><br>
             <input type="submit" value="Submit">
         </form>

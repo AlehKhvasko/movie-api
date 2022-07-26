@@ -5,7 +5,11 @@ import com.alehkhvasko.movieapi.models.entity.MovieEntity;
 import com.alehkhvasko.movieapi.service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -31,41 +35,35 @@ public class MovieController {
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(required = false) Integer count) {
-
         MovieEntity movieEntity;
-        if (movieService.getMovieByCount(count).isEmpty()) {
-            System.out.println(count);
+        if (movieService.findMovieByCountNumber(count).isEmpty()) {
             movieEntity = new MovieEntity();
-        }
-
-        else {
+        } else {
             movieEntity = movieService.getByCountMovie(count);
         }
-        model.addAttribute("movie", movieEntity);
+        model.addAttribute("movies", movieEntity);
         return "form";
+        // int index = getGradeIndex(id);
+        //model.addAttribute("grade", index == Constants.NOT_FOUND ? new Grade()
+        //         : studentGrades.get(index));
+        // return "form";
     }
 
-    @GetMapping  (value = "/delete/{count}")
+    @GetMapping("/delete/{count}")
     public String handleDeleteUser(@PathVariable Integer count) {
         movieService.deleteMovie(movieService.getByCountMovie(count));
         return "redirect:/movies";
     }
 
     @GetMapping("/handleSubmit")
-    public String addMovie(MovieDto movieDto) {
+    public String addMovie(@Valid @ModelAttribute("movies") MovieDto movieDto,
+                           BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("movies", movieDto);
+            return "form";
+        }
         movieService.addOrUpdateMovie(movieDto, movieDto.count);
         return "redirect:/movies";
     }
 
-
-/*    @DeleteMapping("/{id}")
-    public void deleteMovie(@PathVariable Integer id) {
-        movieService.deleteMovie(id);
-    }*/
-
-
-/*    @PostMapping("/{id}")
-    public void addAuthor(@RequestBody @Valid AuthorDto authorDto, @PathVariable Integer id) {
-        movieService.addAuthor(authorDto, id);
-    }*/
 }
