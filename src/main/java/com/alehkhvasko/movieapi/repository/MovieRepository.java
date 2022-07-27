@@ -20,10 +20,14 @@ public class MovieRepository {
         movieList.removeIf(t->t.getCount().equals(movieEntity.getCount()));
     }
 
-    public Optional<MovieEntity> get(Integer id){
+    public Optional<MovieEntity> get(Integer count){
         return movieList.stream()
-                .filter(movieEntity -> movieEntity.getId().equals(id))
+                .filter(movieEntity -> movieEntity.getCount().equals(count))
                 .findFirst();
+    }
+
+    public void updateMovieList(List<MovieEntity> movieList){
+        movieList.addAll(movieList);
     }
 
     public List<MovieEntity> getAllMovies(){

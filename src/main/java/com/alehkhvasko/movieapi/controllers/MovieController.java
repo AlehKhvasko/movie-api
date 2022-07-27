@@ -6,7 +6,6 @@ import com.alehkhvasko.movieapi.service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,7 +26,7 @@ public class MovieController {
         model.addAttribute("movies", movieService.getAllMovies());
         return "movie.html";
     }
-
+    //TODO not updating, creates new movie
     @GetMapping("/movies/{id}")
     public MovieEntity getMovie(@PathVariable Long id) {
         return movieService.getMovie(id);
@@ -35,35 +34,24 @@ public class MovieController {
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(required = false) Integer count) {
-        MovieEntity movieEntity;
-        if (movieService.findMovieByCountNumber(count).isEmpty()) {
-            movieEntity = new MovieEntity();
-        } else {
-            movieEntity = movieService.getByCountMovie(count);
-        }
-        model.addAttribute("movies", movieEntity);
+        model.addAttribute("movies", movieService.addMovieById(count));
         return "form";
-        // int index = getGradeIndex(id);
-        //model.addAttribute("grade", index == Constants.NOT_FOUND ? new Grade()
-        //         : studentGrades.get(index));
-        // return "form";
     }
 
     @GetMapping("/delete/{count}")
     public String handleDeleteUser(@PathVariable Integer count) {
-        movieService.deleteMovie(movieService.getByCountMovie(count));
+        movieService.deleteMovie(movieService.getByCountId(count));
         return "redirect:/movies";
     }
 
     @GetMapping("/handleSubmit")
     public String addMovie(@Valid @ModelAttribute("movies") MovieDto movieDto,
                            BindingResult result, Model model) {
-        if (result.hasErrors()) {
+       if (result.hasErrors()) {
             model.addAttribute("movies", movieDto);
             return "form";
         }
-        movieService.addOrUpdateMovie(movieDto, movieDto.count);
+        movieService.addMovieDto(movieDto);
         return "redirect:/movies";
     }
-
 }

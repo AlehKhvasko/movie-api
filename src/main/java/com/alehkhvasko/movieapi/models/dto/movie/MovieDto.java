@@ -30,8 +30,20 @@ public class MovieDto {
         this.name=name;
         this.description=description;
     }
-
     public void addAuthor(AuthorDto authorDto){
         authorDtos.add(authorDto);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MovieDto movieDto = (MovieDto) o;
+        return Objects.equals(count, movieDto.count);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(count);
     }
 }
