@@ -1,7 +1,6 @@
 package com.alehkhvasko.movieapi.controllers;
 
 import com.alehkhvasko.movieapi.models.dto.movie.MovieDto;
-import com.alehkhvasko.movieapi.models.entity.MovieEntity;
 import com.alehkhvasko.movieapi.service.MovieService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,17 +23,17 @@ public class MovieController {
     @GetMapping("/movies")
     public String getAllMovies(Model model) {
         model.addAttribute("movies", movieService.getAllMovies());
-        return "movie.html";
+        return "movie";
     }
-    //TODO not updating, creates new movie
+    /*
     @GetMapping("/movies/{id}")
     public MovieEntity getMovie(@PathVariable Long id) {
-        return movieService.getMovie(id);
-    }
+        return movieService.getMovieByCountNumber(id);
+    }*/
 
     @GetMapping("/")
     public String getForm(Model model, @RequestParam(required = false) Integer count) {
-        model.addAttribute("movies", movieService.addMovieById(count));
+        model.addAttribute("movies", movieService.addMovieByCountId(count));
         return "form";
     }
 

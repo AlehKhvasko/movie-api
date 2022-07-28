@@ -22,11 +22,6 @@ public class MovieService {
         this.moviesMapper = moviesMapper;
     }
 
-    public MovieEntity getMovie(Long id) {
-        return movieRepository.get(Math.toIntExact(id))
-                .orElseThrow(IllegalArgumentException::new);
-    }
-
     public List<MovieEntity> getAllMovies() {
         return movieRepository.getAllMovies();
     }
@@ -66,7 +61,7 @@ public class MovieService {
         return movies.get(count - 1);
     }
 
-    public MovieEntity addMovieById(Integer count) {
+    public MovieEntity addMovieByCountId(Integer count) {
         if (findMovieByCountNumber(count).isEmpty()) {
             return new MovieEntity();
         }
@@ -80,8 +75,8 @@ public class MovieService {
                     foundMovieDto.setName(movieDto.getName());
                     foundMovieDto.setDescription(movieDto.getDescription());
             }
-            movieRepository.updateMovieList(movieEntities);
         }
+        movieRepository.updateMovieList(movieEntities);
     }
 }
 /*

@@ -4,18 +4,15 @@ import com.alehkhvasko.movieapi.mapper.MoviesMapper;
 import com.alehkhvasko.movieapi.models.dto.movie.MovieDto;
 import com.alehkhvasko.movieapi.models.entity.MovieEntity;
 import com.alehkhvasko.movieapi.repository.MovieRepository;
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -63,7 +60,13 @@ class MovieServiceTest {
     }
 
     @Test
-    void findMovieByCountNumber() {
+    void addMovieDto_should_add_movieEntity_if_not_in_db() {
+        //TODO How to test real addding to db & why it's in red color?
+
+    }
+
+    @Test
+    void findMovieByCountNumber_should_return_movieEntity_if_exist() {
         when(movieRepository.getAllMovies()).thenReturn(movieEntities);
         List<MovieEntity> result = movieService.getAllMovies();
         MovieEntity movieEntity = movieService.findMovieByCountNumber(1).get();
@@ -72,18 +75,60 @@ class MovieServiceTest {
     }
 
     @Test
-    void deleteMovie() {
+    void deleteMovie_should_invoke_delete_if_exist() {
+        MovieEntity movieEntity = movieEntities.get(0);
+        doNothing().when(movieRepository)
+                .delete(movieEntity);
+        movieService.deleteMovie(movieEntity);
+        verify(movieRepository, times(1))
+                .delete(movieEntity);
     }
 
     @Test
-    void getByCountId() {
+    void getByCountId_should_return_movieEntity_if_exist() {
+        when(movieRepository.getAllMovies()).thenReturn(movieEntities);
+        MovieEntity movieEntity = movieEntities.get(0);
+        MovieEntity result = movieService.getByCountId(1);
+        assertEquals(result, movieEntity );
     }
 
     @Test
-    void addMovieById() {
+    void getByCountId_throw_IllegalAccessException_when_db_is_empty() {
+        when(movieRepository.getAllMovies()).thenReturn(new ArrayList<>());
+        IllegalAccessException thrown = Assertions.assertThrows(IllegalAccessException.class, () -> {
+            movieService.getByCountId(1);
+        });
+
+        assertEquals("No movies in Db", thrown.getMessage());
+    }
+
+    @Test
+    void addMovieByCountId_should_return_movieEntity_if_exists() {
+        MovieEntity result = movieEntities.get(0);
+        when(movieRepository.getAllMovies()).thenReturn(movieEntities);
+        MovieEntity movieEntity = movieService.addMovieByCountId(1);
+
+        assertEquals(movieEntity, result);
+    }
+
+    @Test
+    void addMovieByCountId_should_return_empty_movieEntity_if_doesnt_exist_in_db() {
+        MovieEntity result = new MovieEntity();
+        when(movieRepository.getAllMovies()).thenReturn(new ArrayList<>());
+        MovieEntity movieEntity = movieService.addMovieByCountId(1);
+
+        assertEquals(movieEntity, result);
     }
 
     @Test
     void updateMovie() {
+        MovieDto movieDto = moviesDto.get(0);
+        when(movieRepository.getAllMovies()).thenReturn(movieEntities);
+        doNothing().when(movieRepository).updateMovieList(movieEntities);
+        movieService.updateMovie(movieDto);
+        verify(movieRepository, times(1))
+                .getAllMovies();
+        verify(movieRepository, times(1))
+                .updateMovieList(movieEntities);
     }
 }
