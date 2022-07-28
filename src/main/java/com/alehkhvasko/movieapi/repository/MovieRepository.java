@@ -3,27 +3,31 @@ package com.alehkhvasko.movieapi.repository;
 import com.alehkhvasko.movieapi.models.entity.MovieEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class MovieRepository {
-    private List<MovieEntity> movieList = new ArrayList<>();
+    private final Set<MovieEntity> movieList = new HashSet<>();
 
-    public void add(MovieEntity movieEntity){
+    public void save(MovieEntity movieEntity) {
         movieList.add(movieEntity);
     }
 
-    public void delete(MovieEntity movieEntity){
-        movieList.removeIf(t->t.getCount().equals(movieEntity.getCount()));
+    public void delete(MovieEntity movieEntity) {
+        movieList.removeIf(t -> t.getCount().equals(movieEntity.getCount()));
     }
 
-    public void updateMovieList(List<MovieEntity> movieList){
-        movieList.addAll(movieList);
+    public void updateMovieList(List<MovieEntity> movieList) {
+        this.movieList.addAll(movieList);
     }
 
-    public List<MovieEntity> getAllMovies(){
-        return Collections.unmodifiableList(movieList);
+    public Set<MovieEntity> getAllMovies() {
+        return Collections.unmodifiableSet(movieList);
+    }
+
+    public Optional<MovieEntity> findById(Long id) {
+        return movieList.stream()
+                .filter(movieEntity -> movieEntity.getId().equals(id))
+                .findFirst();
     }
 }

@@ -2,6 +2,8 @@ package com.alehkhvasko.movieapi.controllers;
 
 import com.alehkhvasko.movieapi.models.dto.movie.MovieDto;
 import com.alehkhvasko.movieapi.service.MovieService;
+import com.alehkhvasko.movieapi.service.MovieServiceImpl;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,43 +16,38 @@ import javax.validation.Valid;
 @RequestMapping
 public class MovieController {
 
-    private final MovieService movieService;
+    private final MovieService movieServiceImpl;
 
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
+    public MovieController(@Qualifier("MovieServiceImpl") MovieServiceImpl movieServiceImpl) {
+        this.movieServiceImpl = movieServiceImpl;
     }
 
     @GetMapping("/movies")
     public String getAllMovies(Model model) {
-        model.addAttribute("movies", movieService.getAllMovies());
+        model.addAttribute("movies", movieServiceImpl.getAllMovies());
         return "movie";
     }
-    /*
-    @GetMapping("/movies/{id}")
-    public MovieEntity getMovie(@PathVariable Long id) {
-        return movieService.getMovieByCountNumber(id);
-    }*/
 
-    @GetMapping("/")
-    public String getForm(Model model, @RequestParam(required = false) Integer count) {
-        model.addAttribute("movies", movieService.addMovieByCountId(count));
-        return "form";
-    }
-
-    @GetMapping("/delete/{count}")
-    public String handleDeleteUser(@PathVariable Integer count) {
-        movieService.deleteMovie(movieService.getByCountId(count));
-        return "redirect:/movies";
-    }
+//    @GetMapping("/")
+//    public String getForm(Model model, @RequestParam(required = false) Integer id) {
+//        model.addAttribute("movies", movieServiceImpl.addMovieByCountId(id));
+//        return "form";
+//    }
+//
+//    @GetMapping("/delete/{count}")
+//    public String handleDeleteUser(@PathVariable Integer count) {
+//        movieServiceImpl.deleteMovie(movieServiceImpl.getByCountId(count));
+//        return "redirect:/movies";
+//    }
 
     @GetMapping("/handleSubmit")
     public String addMovie(@Valid @ModelAttribute("movies") MovieDto movieDto,
                            BindingResult result, Model model) {
-       if (result.hasErrors()) {
+        if (result.hasErrors()) {
             model.addAttribute("movies", movieDto);
             return "form";
         }
-        movieService.addMovieDto(movieDto);
+        movieServiceImpl.add(movieDto);
         return "redirect:/movies";
     }
 }

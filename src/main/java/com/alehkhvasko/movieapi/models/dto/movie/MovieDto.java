@@ -1,12 +1,8 @@
 package com.alehkhvasko.movieapi.models.dto.movie;
 
-import com.alehkhvasko.movieapi.models.dto.author.AuthorDto;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.*;
-import java.util.*;
+import javax.validation.constraints.Size;
 
 @Data
 public class MovieDto {
@@ -15,35 +11,13 @@ public class MovieDto {
     public String name;
     @Size(min = 3, message = "Should be at least 3 symbols")
     public String description;
-    private List<AuthorDto> authorDtos = new ArrayList<>();
 
     public MovieDto() {
     }
 
-    public MovieDto(String name, String description, List<AuthorDto> authorDtos) {
+    public MovieDto(String name, String description) {
         this.name = name;
         this.description = description;
-        this.authorDtos = authorDtos;
     }
 
-    public MovieDto(String name, String description){
-        this.name=name;
-        this.description=description;
-    }
-    public void addAuthor(AuthorDto authorDto){
-        authorDtos.add(authorDto);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MovieDto movieDto = (MovieDto) o;
-        return Objects.equals(count, movieDto.count);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(count);
-    }
 }

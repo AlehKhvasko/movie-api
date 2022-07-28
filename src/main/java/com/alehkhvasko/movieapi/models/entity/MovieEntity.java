@@ -1,25 +1,35 @@
 package com.alehkhvasko.movieapi.models.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MovieEntity {
+    private final Long id = new Random().nextLong();
     private Integer count;
-//    private final Long id= new Random().nextLong();
     private String name;
     private String description;
+
+    private Set<AuthorEntity> authorEntityList = new HashSet<>();
 
     public MovieEntity(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public void addAuthor(AuthorEntity authorEntity) {
+        authorEntityList.add(authorEntity);
+    }
+
+    public void addAuthors(List<AuthorEntity> authorEntityList) {
+        this.authorEntityList.addAll(authorEntityList);
     }
 
     @Override
@@ -27,12 +37,11 @@ public class MovieEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MovieEntity that = (MovieEntity) o;
-        return Objects.equals(count, that.count);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(count);
+        return Objects.hash(id);
     }
-    //private List<AuthorEntity> authors = new ArrayList<>();
 }
