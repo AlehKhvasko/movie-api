@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class MovieApi {
+class MovieApiTest {
     @Autowired
     public MockMvc mockMvc;
 
@@ -66,4 +66,11 @@ class MovieApi {
                 .andExpect(model().attributeExists("movies"));
     }
 
+    @Test
+    public void testDeleteMovieNotFound() throws Exception{
+        RequestBuilder request = MockMvcRequestBuilders.get("/delete/{id}", 1);
+        mockMvc.perform(request)
+                .andExpect(status().is4xxClientError())
+                .andExpect(redirectedUrl("/movies"));
+    }
 }
